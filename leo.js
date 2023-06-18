@@ -53,3 +53,7 @@ async function testSupabase(req, res) {
 }
 
 module.exports = { getUserInfo, testSupabase };
+  
+const express = require('express');
+const path = require('path');
+const leo = require('./leo'); // Require the leo.js file
