@@ -14,12 +14,22 @@
         <h1 class="text-center mb-4">Leonardo API Interaction</h1>
         <button id="btnGetUserInfo" class="btn btn-primary btn-block">Get User Info</button>
         <div id="userInfo" class="mt-4"></div>
+
+        <h2 class="text-center mb-4">Generate Image</h2>
+        <form id="imageGenerationForm">
+            <div class="form-group">
+                <label for="textInput">Text Input:</label>
+                <input type="text" id="textInput" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Generate Image</button>
+        </form>
+        <div id="imageGenerationResult" class="mt-4"></div>
     </div>
 
     <!-- MDB JavaScript and your custom JavaScript -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.js"></script>
     <script src="script.js"></script>
-  <a href="/api/test-supabase">Test Supabase Connection</a>
+    <a href="/api/test-supabase">Test Supabase Connection</a>
 
 </body>
 </html>
