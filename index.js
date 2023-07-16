@@ -22,13 +22,15 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static('.'));
 
-// Import the handlers from leo.js and imageGeneration.js
+// Import the handlers from leo.js, imageGeneration.js, and imageRetrieval.js
 const leo = require('./leo')(sdk, supabase);
 const imageGeneration = require('./imageGeneration')(sdk, supabase);
+const imageRetrieval = require('./imageRetrieval')(sdk, supabase); // New
 
 // Use the functions as the handlers for your endpoints
 app.get('/api/get-user-info', leo.getUserInfo);
 app.post('/api/generate-image', imageGeneration.generateImage);
+app.get('/api/retrieve-image/:generationId', imageRetrieval.retrieveImage); // New
 
 app.get('/api/test-supabase', leo.testSupabase);
 
