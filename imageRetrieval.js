@@ -1,30 +1,35 @@
 // imageRetrieval.js
 
-module.exports = function(sdk, supabase) {
-  async function retrieveImage(generationId) {
+const fetch = require('node-fetch');
+
+module.exports = (sdk) => {
+  async function retrieveImage(req, res) {
+    const generationId = req.params.generationId;
+    console.log(`Retrieving image with generationId: ${generationId}`);
+
     try {
-      // Get the generation details, including the image URL
-      const generationResponse = await sdk.getGeneration({ generationId });
-      const imageUrl = generationResponse.data.sdGeneration.imageUrl;
+      const { data, error } = await sdk.getGenerationById({ id: generationId });
 
-      // Store the image URL in the Supabase 'images' table
-      const { data: insertData, error: insertError } = await supabase
-        .from('images')
-        .insert({
-          leo_image_id: generationId,
-          leo_image_url: imageUrl
-        });
-
-      console.log('Supabase insert response:', insertData, insertError); // Debugging statement
-
-      return imageUrl;
-    } catch (error) {
-      console.error('Error in retrieveImage:', error); // Debugging statement
-      throw error;
+      if (error) {
+        console.error(`Error in retrieveImage: ${error.message}`);
+        res.status(500).send({ error: error.message });
+      } else {
+        console.log(`Leonardo API response: ${JSON.stringify(data, null, 2)}`);
+        if (data.generations_by_pk.generated_images && data.generations_by_pk.generated_images.length > 0) {
+          const imageUrl = data.generations_by_pk.generated_images[0].url;
+          // Create a link to the image
+          const imageLink = imageUrl;
+          res.send({ imageLink });
+        } else {
+          console.error(`No generated images found for generationId: ${generationId}`);
+          res.status(404).send({ error: 'No generated images found' });
+        }
+      }
+    } catch (err) {
+      console.error(`Error in retrieveImage: ${err.message}`);
+      res.status(500).send({ error: err.message });
     }
   }
 
   return { retrieveImage };
 };
-// 
-// // index.js
